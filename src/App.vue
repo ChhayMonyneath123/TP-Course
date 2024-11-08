@@ -14,6 +14,7 @@
 
 import Category from './components/category.vue';
 import Promotion from './components/promotion.vue';
+    // tp02
 import axios from 'axios';
 
 export default {
