@@ -2,7 +2,6 @@
   <div id="app">
     <NavBar />
     <div class="body">
-
       <Menu />
       <router-view />
     </div>

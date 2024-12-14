@@ -1,65 +1,89 @@
 <template>
     <header class="header">
-        <nav>
-            <div class="a">
-                <router-link to="/page1" class="btn">Header</router-link>
-            </div>
-            <div class="b">
-                <router-link to="/page1" class="btn" :class="{ active: isPageActive('/page1') }">Page 1</router-link>
-                <router-link to="/page2" class="btn" :class="{ active: isPageActive('/page2') }">Page 2</router-link>
-                <router-link to="/page3" class="btn" :class="{ active: isPageActive('/page3') }">Page 3</router-link>
-            </div>
-
-        </nav>
+      <nav>
+        <div class="a">
+          <router-link :to="{ name: 'page', params: { nb: 1 } }" class="btn">Header</router-link>
+        </div>
+        <div class="b">
+          <router-link
+            v-for="page in pages"
+            :key="page.nb"
+            :to="{ name: 'page', params: { nb: page.nb } }"
+            class="btn"
+            :class="{ active: isPageActive(page.nb) }"
+          >
+            {{ page.name }}
+          </router-link>
+        </div>
+      </nav>
     </header>
-
-</template>
-<script>
- import { useRoute } from 'vue-router';
-export default {
+  </template>
+  
+  <script>
+  import { useRoute } from "vue-router";
+  
+  export default {
     name: "NavBar",
     setup() {
       const route = useRoute();
   
-      const isPageActive = (path) => route.path === path;
+      const isPageActive = (nb) => {
+        // Check if the current route matches the dynamic page number
+        return route.path.startsWith(`/page/${nb}`);
+      };
   
       return { isPageActive };
     },
-}
-</script>
-<style>
-.header {
+    data() {
+      return {
+        pages: [
+          { nb: 1, name: "Page 1" },
+          { nb: 2, name: "Page 2" },
+          { nb: 3, name: "Page 3" },
+        ],
+      };
+    },
+  };
+  </script>
+  
+  <style>
+  .header {
     padding: 10px;
     background-color: #f5f5f5;
     border-bottom: 1px solid #0e0303;
-
-}
-
-nav {
+  }
+  
+  nav {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-}
-.a{
+  }
+  
+  .a {
     display: flex;
     justify-content: start;
-}
-.b{
+  }
+  
+  .b {
     display: flex;
     justify-content: end;
     gap: 20px;
-    
-}
-.btn:hover {
+  }
+  
+  .btn:hover {
     background: transparent;
-
-}
-.btn{
+    color: #555;
+  }
+  
+  .btn {
     color: #333;
     text-decoration: none;
-}
-.btn.active{
+    transition: color 0.3s ease;
+  }
+  
+  .btn.active {
     color: red;
-}
-
-</style>
+    font-weight: bold;
+  }
+  </style>
+  
