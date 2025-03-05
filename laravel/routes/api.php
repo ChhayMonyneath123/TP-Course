@@ -15,7 +15,7 @@ Route::controller(CategoryController::class)->prefix('categories')->group(functi
     Route::get('/{categoryId}', 'getCategory');
     Route::patch('/{categoryId}', 'updateCategory');
     Route::delete('/{categoryId}', 'deleteCategory');
-    Route::get('/{categoryId}/products', 'getProductsCategories');
+    
 
 });
 
@@ -25,6 +25,7 @@ Route::controller(ProductController::class)->prefix('products')->group(function(
     Route::get('/{productId}', 'getProduct');
     Route::patch('/{productId}', 'updateProduct');
     Route::delete('/{productId}', 'deleteProduct');
+    Route::get('/categories/{categoryId}/products', 'getProductsCategories');
 
 
 });

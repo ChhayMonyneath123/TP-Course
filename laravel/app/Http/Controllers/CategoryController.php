@@ -8,27 +8,43 @@ class CategoryController extends Controller
 {
     // ---- Get /api/categories
     public function getCategories(){
-        return [" message" => " Getting list of categories"];
+        $categories = Category::all();
+        return $categories;
+        // return [" message" => " Getting list of categories"];
     }
     // ---- Post /api/categories
-    public function createCategory(){
-        return [" message" => " Creating 1 new category"];
+    public function createCategory(Request $request):array {
+        $category = new Category();
+        $category->name = $request->get('name');
+        
+        $category->save();
+        return ["message" => "success"];
+        // return [" message" => " Creating 1 new category"];
     }
     // ---- Get /api/categories/{categoryId}
-    public function getCategory($categoryId){
-        return [" message" => "Getting 1 category base on given categoryId"];
+    public function getCategory($categoryId): Category|null{
+        $categories = Category::find($categoryId)
+        return $categories;
+        // return [" message" => "Getting 1 category base on given categoryId"];
     }
     // ---- Patch /api/categories/{categoryId}
-    public function updateCategory($categoryId){
-        return [" message" => "Updating 1 category base on given categoryId"];
+    public function updateCategory(Request $request, $categoryId):array {
+        $category = Category::find ($categoryId);
+        if (!$categroy){
+            return [" message" => "Category not found"];
+        }
+        $category->update($request->all());
+        return [" message" => "success"];
     }
 
     // ---- Delete /api/categories/{categoryId}
-    public function deleteCategory($categoryId){
-        return [" message" => "Deleting 1 category base on given categoryId"];
+    public function deleteCategory($categoryId):array{
+        $category = Category::find ($categoryId);
+        if (!$categroy){
+            return [" message" => "Category not found"];
+        }
+        $category->delete();
+        return [" message" => "success"];
     }
-    // ---- Get /api/categories/{categoryId}/products
-    public function getProductsCategories($categoryId){
-    return [" message" => "Deleting 1 product base on given productId"];
-    }
+
 }
