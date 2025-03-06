@@ -1,65 +1,104 @@
-<?php
-
+<?PHP
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Product;
+use Illuminate\Http\JsonResponse;
 
 class ProductController extends Controller
 {
-    // ---- Get /api/products
-    public function getProducts(): Collection{
+    // Get all products - GET /api/products
+    public function getProducts(): JsonResponse
+    {
         $products = Product::all();
-        return $products;
-        // return [" message" => " Getting list of products"];
+        return response()->json([
+            "success" => true,
+            "message" => "Getting list of products",
+            "data" => $products
+        ], 200);
     }
-    // ---- Post /api/products
-    public function createProducts(Request $request):array{
-        $product = new Product();
-        $product->name = $request->get('name');
-        $product->price = $request->get('price');
-        $product->category_id = $request->get('category_id');
-        $product->active = $request->get('active');
 
-        $product->save();
-        return ["message" => "success"]
+    // Create a new product - POST /api/products
+    public function createProduct(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'pricing' => 'required|numeric|min:0',
+            'category_id' => 'required|exists:categories,id'
+        ]);
 
-        // return [" message" => " Creating 1 new product"];
+        $product = Product::create($validated);
+
+        return response()->json([
+            "success" => true,
+            "message" => "Creating a new product",
+            "data" => $product
+        ], 201);
     }
-    // ---- Get /api/products/{productId}
-    public function getProduct($productId): Product|null{
-        $products = Product::find($productId);
-        return $products;
-        // return [" message" => "Getting 1 product base on given productId"];
-    }
-    // ---- Patch /api/products/{productId}
-    public function updateProduct(Request $request, $productId): array
+
+    // Get a specific product - GET /api/products/{productId}
+    public function getProduct($productId): JsonResponse
     {
         $product = Product::find($productId);
+
         if (!$product) {
-            return ["message" => "Product not found"];
+            return response()->json([
+                "success" => false,
+                "message" => "Product not found"
+            ], 404);
         }
 
-        $product->update($request->all());
-
-        return ["message" => "success"];
+        return response()->json([
+            "success" => true,
+            "message" => "Getting product based on given productId",
+            "data" => $product
+        ], 200);
     }
 
-    // ---- Delete /api/products/{productId}
-    public function deleteProduct($productId): array
+    // Update a product - PATCH /api/products/{productId}
+    public function updateProduct(Request $request, $productId): JsonResponse
     {
         $product = Product::find($productId);
+
         if (!$product) {
-            return ["message" => "Product not found"];
+            return response()->json([
+                "success" => false,
+                "message" => "Product not found"
+            ], 404);
+        }
+
+        $validated = $request->validate([
+            'name' => 'sometimes|string|max:255',
+            'price' => 'sometimes|numeric|min:0',
+            'category_id' => 'sometimes|exists:categories,id'
+        ]);
+
+        $product->update($validated);
+
+        return response()->json([
+            "success" => true,
+            "message" => "Updating product based on given productId",
+            "data" => $product
+        ], 200);
+    }
+
+    // Delete a product - DELETE /api/products/{productId}
+    public function deleteProduct($productId): JsonResponse
+    {
+        $product = Product::find($productId);
+
+        if (!$product) {
+            return response()->json([
+                "success" => false,
+                "message" => "Product not found"
+            ], 404);
         }
 
         $product->delete();
 
-        return ["message" => "success"];
-    }
-
-    // ---- Get /api/categories/{categoryId}/products
-    public function getProductsByCategory($categoryId): Collection
-    {
-        return Product::where('category_id', $categoryId)->get();
+        return response()->json([
+            "success" => true,
+            "message" => "Deleting product based on given productId"
+        ], 200);
     }
 }
