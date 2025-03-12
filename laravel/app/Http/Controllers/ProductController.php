@@ -21,13 +21,14 @@ class ProductController extends Controller
     // Create a new product - POST /api/products
     public function createProduct(Request $request): JsonResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'pricing' => 'required|numeric|min:0',
-            'category_id' => 'required|exists:categories,id'
-        ]);
 
-        $product = Product::create($validated);
+        // $validated = $request->validate([
+        //     'name' => 'required|string|max:255',
+        //     'pricing' => 'required|numeric|min:0',
+        //     'category_id' => 'required|exists:categories,id'
+        // ]);
+        // dd("Hello");
+        $product = Product::create($request->all());
 
         return response()->json([
             "success" => true,
