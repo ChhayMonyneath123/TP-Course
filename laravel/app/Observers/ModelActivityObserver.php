@@ -3,35 +3,34 @@
 namespace App\Observers;
 
 use App\Models\ActivityLog;
-use App\Models\Order;
 
 class ModelActivityObserver
 {
     /**
      * Handle the "created" event.
      */
-    public function created(Order $order): void
+    public function created(Model $model): void
     {
         ActivityLog::create([
-            'model'    => get_class($order),
-            'model_id' => $order->id,
+            'model'    => get_class($model),
+            'model_id' => $model->id,
             'action'   => 'created',
-            'changes'  => $order->toArray(),
+            'changes'  => $model->toArray(),
         ]);
     }
 
     /**
      * Handle the "updated" event.
      */
-    public function updated(Order $order): void
+    public function updated(Model $model): void
     {
         ActivityLog::create([
-            'model'    => get_class($order),
-            'model_id' => $order->id,
+            'model'    => get_class($model),
+            'model_id' => $model->id,
             'action'   => 'updated',
             'changes'  => [
-                'old' => $order->getOriginal(),
-                'new' => $order->getChanges(),
+                'old' => $model->getOriginal(),
+                'new' => $model->getChanges(),
             ],
         ]);
     }
@@ -39,13 +38,13 @@ class ModelActivityObserver
     /**
      * Handle the "deleted" event.
      */
-    public function deleted(Order $order): void
+    public function deleted(Model $model): void
     {
         ActivityLog::create([
-            'model'    => get_class($order),
-            'model_id' => $order->id,
+            'model'    => get_class($model),
+            'model_id' => $model->id,
             'action'   => 'deleted',
-            'changes'  => $order->toArray(),
+            'changes'  => $model->toArray(),
         ]);
     }
 }
