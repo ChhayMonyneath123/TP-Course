@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\ActivityLog;
+use Illuminate\Database\Eloquent\Model;
 
 class ModelActivityObserver
 {
@@ -15,7 +16,7 @@ class ModelActivityObserver
             'model'    => get_class($model),
             'model_id' => $model->id,
             'action'   => 'created',
-            'changes'  => $model->toArray(),
+            'changes'  => json_encode($model->toArray()),
         ]);
     }
 
@@ -28,15 +29,15 @@ class ModelActivityObserver
             'model'    => get_class($model),
             'model_id' => $model->id,
             'action'   => 'updated',
-            'changes'  => [
+            'changes'  => json_encode([
                 'old' => $model->getOriginal(),
                 'new' => $model->getChanges(),
-            ],
+            ]),
         ]);
     }
 
     /**
-     * Handle the "deleted" event.
+     * Handle the "deleted" event (soft delete).
      */
     public function deleted(Model $model): void
     {
@@ -44,7 +45,7 @@ class ModelActivityObserver
             'model'    => get_class($model),
             'model_id' => $model->id,
             'action'   => 'deleted',
-            'changes'  => $model->toArray(),
+            'changes'  => json_encode($model->toArray()),
         ]);
     }
 }
