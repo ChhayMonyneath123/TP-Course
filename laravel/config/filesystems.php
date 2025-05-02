@@ -67,6 +67,7 @@ return [
             'bucket' => env('MINIO_BUCKET'),
             'endpoint' => env('MINIO_ENDPOINT'),
             'use_path_style_endpoint' => true,
+            'url' => env('MINIO_PUBLIC_URL', 'http://localhost:9000/bucket'),
         ],
             
 
@@ -86,5 +87,7 @@ return [
     'links' => [
         public_path('storage') => storage_path('app/public'),
     ],
+    
+
 
 ];

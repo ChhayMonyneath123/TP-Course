@@ -1,8 +1,9 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UploadController;
+use App\Http\Controllers\ImageController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
@@ -21,5 +22,12 @@ Route::get('/upload_file', function () {
     return view('upload_file');
     });
 Route::post('/upload', [UploadController::class, 'upload'])->name('upload');
+
+Route::get('/upload-image', [ImageController::class, 'create']);
+Route::post('/upload-image', [ImageController::class, 'store'])->name('upload.image');
+
+Route::get('/gallery', [ImageController::class, 'gallery'])->name('gallery');
+
+
 
 require __DIR__.'/auth.php';
