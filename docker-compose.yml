@@ -57,6 +57,8 @@ services:
     command: server /data --console-address ":9001"
     volumes:
     - minio-data:/data
+    networks:
+      - laravel
 volumes:
   minio-data:
 networks:

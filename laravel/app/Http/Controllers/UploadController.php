@@ -5,36 +5,32 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-
 class UploadController extends Controller
 {
     public function upload(Request $request)
-        {
-        // Validate the request
+    {
+        // Validate the incoming file
         $request->validate([
-        'document' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'document' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
-        //First
-        // // Store the file
-        // $path = $request->file('document')->store('uploads');
-        // Return a response
-        // return response()->json(['path' => $path], 200);
-
-
-        //second
-        // Get the uploaded file
-        $image = $request->file('document');
-
-        // Generate a unique file name
-        $fileName = uniqid() . '.' . $image->getClientOriginalExtension();
-
-        // Store the file in MinIO under 'uploads' directory
-        $path = Storage::disk('minio')->putFileAs('uploads', $image, $fileName);
-
-        // Return a JSON response with the public URL
+        
+        // Store file locally on the 'public' disk (storage/app/public/uploads)
+        $path = $request->file('document')->store('uploads', 'public');
+        
+        // Generate public URL for the stored file
+        $publicUrl = Storage::disk('public')->url($path);
+        
+        // Store file in MinIO
+        $minioPath = $request->file('document')->store('uploads', 'minio');
+        // Build full MinIO access URL
+        $minioUrl = env('MINIO_ENDPOINT') . '/' . env('MINIO_BUCKET') . '/' . $minioPath;
+        
+        // Return JSON response
         return response()->json([
-            'image_url' => Storage::disk('minio')->url($path)
-        ]);
-    }
+            'path' => $path,
+            'public_url' => $publicUrl,
+            'minio_url' => $minioUrl,
+        ], 200);
 
+    }
 }
