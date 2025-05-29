@@ -32,8 +32,9 @@ let TaskService = class TaskService {
         const task = this.tasksRepo.create(body);
         return this.tasksRepo.save(task);
     }
-    updateTask(id, body) {
-        return this.tasksRepo.update(id, body);
+    async updateTask(id, body) {
+        await this.tasksRepo.update(id, body);
+        return this.getTask(id);
     }
     deleteTask(id) {
         return this.tasksRepo.delete(id);

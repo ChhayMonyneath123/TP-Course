@@ -22,9 +22,10 @@ export class TaskService {
     return this.tasksRepo.save(task);
   }
 
-  updateTask(id: number, body: Partial<Task>) {
-    return this.tasksRepo.update(id, body);
-  }
+  async updateTask(id: number, body: Partial<Task>) {
+  await this.tasksRepo.update(id, body);
+  return this.getTask(id);
+}
 
   deleteTask(id: number) {
     return this.tasksRepo.delete(id);

@@ -20,6 +20,9 @@ let UsersController = class UsersController {
     constructor(userService) {
         this.userService = userService;
     }
+    findAll() {
+        return this.userService.findAll();
+    }
     getUser(username) {
         return this.userService.getUser(username);
     }
@@ -35,6 +38,12 @@ let UsersController = class UsersController {
 };
 exports.UsersController = UsersController;
 __decorate([
+    (0, common_1.Get)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], UsersController.prototype, "findAll", null);
+__decorate([
     (0, common_1.Get)('/:username'),
     __param(0, (0, common_1.Param)('username')),
     __metadata("design:type", Function),
@@ -42,14 +51,14 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "getUser", null);
 __decorate([
-    (0, common_1.Post)('/users'),
+    (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "createUser", null);
 __decorate([
-    (0, common_1.Patch)('/users/:username'),
+    (0, common_1.Patch)('/:username'),
     __param(0, (0, common_1.Param)('username')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -57,7 +66,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "updateUser", null);
 __decorate([
-    (0, common_1.Delete)('/users/:username'),
+    (0, common_1.Delete)('/:username'),
     __param(0, (0, common_1.Param)('username')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

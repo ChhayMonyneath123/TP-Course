@@ -1,10 +1,12 @@
 import { TaskService } from './task.service';
+import { Task } from './task.entity';
 export declare class TasksController {
     private readonly taskService;
     constructor(taskService: TaskService);
-    getTask(id: string): Promise<import("./task.entity").Task | null>;
-    createTask(body: any): Promise<import("./task.entity").Task>;
-    markTaskAsDone(body: any, id: string): Promise<import("typeorm").UpdateResult>;
-    markTaskAsPending(body: any, id: string): Promise<import("typeorm").UpdateResult>;
+    findAll(): Promise<Task[]>;
+    getTask(id: string): Promise<Task | null>;
+    createTask(body: Partial<Task>): Promise<Task>;
+    markTaskAsDone(id: string): Promise<Task | null>;
+    markTaskAsPending(id: string): Promise<Task | null>;
     deleteTask(id: string): Promise<import("typeorm").DeleteResult>;
 }

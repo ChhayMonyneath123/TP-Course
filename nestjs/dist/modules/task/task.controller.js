@@ -20,23 +20,32 @@ let TasksController = class TasksController {
     constructor(taskService) {
         this.taskService = taskService;
     }
+    findAll() {
+        return this.taskService.findAll();
+    }
     getTask(id) {
         return this.taskService.getTask(+id);
     }
     createTask(body) {
         return this.taskService.createTask(body);
     }
-    markTaskAsDone(body, id) {
-        return this.taskService.updateTask(+id, body);
+    markTaskAsDone(id) {
+        return this.taskService.updateTask(+id, { completedAt: new Date() });
     }
-    markTaskAsPending(body, id) {
-        return this.taskService.updateTask(+id, body);
+    markTaskAsPending(id) {
+        return this.taskService.updateTask(+id, { completedAt: null });
     }
     deleteTask(id) {
         return this.taskService.deleteTask(+id);
     }
 };
 exports.TasksController = TasksController;
+__decorate([
+    (0, common_1.Get)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], TasksController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)('/:id'),
     __param(0, (0, common_1.Param)('id')),
@@ -45,7 +54,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], TasksController.prototype, "getTask", null);
 __decorate([
-    (0, common_1.Post)('/'),
+    (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -53,18 +62,16 @@ __decorate([
 ], TasksController.prototype, "createTask", null);
 __decorate([
     (0, common_1.Patch)('/:id/done'),
-    __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], TasksController.prototype, "markTaskAsDone", null);
 __decorate([
     (0, common_1.Patch)('/:id/pending'),
-    __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], TasksController.prototype, "markTaskAsPending", null);
 __decorate([

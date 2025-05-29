@@ -4,6 +4,6 @@ export declare class Task {
     name: string;
     description: string;
     createdAt: Date;
-    completedAt: Date;
+    completedAt: Date | null;
     user: User;
 }

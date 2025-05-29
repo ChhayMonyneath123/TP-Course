@@ -1,5 +1,15 @@
 <template>
   <div class="container">
+    <!-- Loading indicator -->
+    <div v-if="store.loading" class="loading">
+      Loading tasks...
+    </div>
+
+    <!-- Error message -->
+    <div v-if="store.error" class="error-message">
+      {{ store.error }}
+      <button @click="store.clearError()" class="close-error">×</button>
+    </div>
     <AddTodo @added="handleAddTodo" />
     <h3>Pending Tasks:</h3>
     <TodoLists status="pending" />
@@ -11,7 +21,7 @@
         >You have <span class="pending-num"> {{ nbOfTodo }} </span> tasks
         pending.</span
       >
-      <button class="clear-button">Clear All</button>
+      <button class="clear-button" @click="clearAllTodos">Clear All</button>
     </div>
   </div>
 </template>
@@ -19,8 +29,8 @@
 import { mapState } from "pinia";
 import AddTodo from "./components/AddTodo.vue";
 import TodoLists from "./components/TodoList.vue";
-
 import { useTodoStore } from "./stores/todo";
+
 export default {
   name: "App",
   setup() {
@@ -38,13 +48,16 @@ export default {
       nbOfTodo: "countTodos",
     }),
   },
+  mounted() {
+    // Fetch todos when the component is mounted
+    this.store.fetchTodos();
+  },
   methods: {
     handleAddTodo(todo) {
       this.store.addTodo(todo);
     },
     clearAllTodos() {
-      console.log("clear");
-      this.store.clearAll();
+        this.store.clearAll();
     },
   },
 };
