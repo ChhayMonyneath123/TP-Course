@@ -6,8 +6,11 @@ import {
   Body,
   Patch,
   Delete,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { UsersService } from './user.service';
+import { CreateUserDto } from './dto/create-user.dto';
 
 
 @Controller('users')
@@ -25,10 +28,9 @@ export class UsersController {
   }
 
   @Post()
-  createUser(
-    @Body() body: { username: string; email: string; password: string },
-  ) {
-    return this.userService.createUser(body);
+  @UsePipes(new ValidationPipe({ whitelist: true }))
+  create(@Body() createUserDto: CreateUserDto) {
+    return this.userService.createUser(createUserDto);
   }
 
   @Patch('/:username')
@@ -43,4 +45,6 @@ export class UsersController {
   deleteUser(@Param('username') username: string) {
     return this.userService.deleteUser(username);
   }
+
+  
 }

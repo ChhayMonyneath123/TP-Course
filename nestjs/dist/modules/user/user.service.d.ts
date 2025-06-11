@@ -8,4 +8,5 @@ export declare class UsersService {
     updateUser(username: string, body: Partial<User>): Promise<import("typeorm").UpdateResult>;
     deleteUser(username: string): Promise<import("typeorm").DeleteResult>;
     findAll(): Promise<User[]>;
+    findOne(id: number): Promise<User>;
 }

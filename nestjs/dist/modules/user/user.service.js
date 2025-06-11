@@ -41,6 +41,16 @@ let UsersService = class UsersService {
     findAll() {
         return this.usersRepo.find({ relations: ['tasks'] });
     }
+    async findOne(id) {
+        const user = await this.usersRepo.findOne({
+            where: { id },
+            relations: ['tasks'],
+        });
+        if (!user) {
+            throw new common_1.NotFoundException(`User with id ${id} not found`);
+        }
+        return user;
+    }
 };
 exports.UsersService = UsersService;
 exports.UsersService = UsersService = __decorate([

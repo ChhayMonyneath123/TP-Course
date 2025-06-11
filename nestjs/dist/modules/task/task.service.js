@@ -22,11 +22,12 @@ let TaskService = class TaskService {
     constructor(tasksRepo) {
         this.tasksRepo = tasksRepo;
     }
-    getTask(id) {
-        return this.tasksRepo.findOne({
-            where: { id },
-            relations: ['user'],
-        });
+    async findOne(id) {
+        const task = await this.tasksRepo.findOne({ where: { id } });
+        if (!task) {
+            throw new common_1.NotFoundException(`Task with id ${id} not found`);
+        }
+        return task;
     }
     createTask(body) {
         const task = this.tasksRepo.create(body);
@@ -34,7 +35,7 @@ let TaskService = class TaskService {
     }
     async updateTask(id, body) {
         await this.tasksRepo.update(id, body);
-        return this.getTask(id);
+        return this.findOne(id);
     }
     deleteTask(id) {
         return this.tasksRepo.delete(id);

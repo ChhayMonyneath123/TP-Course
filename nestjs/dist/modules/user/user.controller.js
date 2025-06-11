@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersController = void 0;
 const common_1 = require("@nestjs/common");
 const user_service_1 = require("./user.service");
+const create_user_dto_1 = require("./dto/create-user.dto");
 let UsersController = class UsersController {
     userService;
     constructor(userService) {
@@ -26,8 +27,8 @@ let UsersController = class UsersController {
     getUser(username) {
         return this.userService.getUser(username);
     }
-    createUser(body) {
-        return this.userService.createUser(body);
+    create(createUserDto) {
+        return this.userService.createUser(createUserDto);
     }
     updateUser(username, body) {
         return this.userService.updateUser(username, body);
@@ -52,11 +53,12 @@ __decorate([
 ], UsersController.prototype, "getUser", null);
 __decorate([
     (0, common_1.Post)(),
+    (0, common_1.UsePipes)(new common_1.ValidationPipe({ whitelist: true })),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [create_user_dto_1.CreateUserDto]),
     __metadata("design:returntype", void 0)
-], UsersController.prototype, "createUser", null);
+], UsersController.prototype, "create", null);
 __decorate([
     (0, common_1.Patch)('/:username'),
     __param(0, (0, common_1.Param)('username')),

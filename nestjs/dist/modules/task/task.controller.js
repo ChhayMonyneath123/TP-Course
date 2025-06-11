@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TasksController = void 0;
 const common_1 = require("@nestjs/common");
 const task_service_1 = require("./task.service");
+const create_task_dto_1 = require("./dto/create-task.dto");
 let TasksController = class TasksController {
     taskService;
     constructor(taskService) {
@@ -24,10 +25,10 @@ let TasksController = class TasksController {
         return this.taskService.findAll();
     }
     getTask(id) {
-        return this.taskService.getTask(+id);
+        return this.taskService.findOne(id);
     }
-    createTask(body) {
-        return this.taskService.createTask(body);
+    create(createTaskDto) {
+        return this.taskService.createTask(createTaskDto);
     }
     markTaskAsDone(id) {
         return this.taskService.updateTask(+id, { completedAt: new Date() });
@@ -47,19 +48,20 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], TasksController.prototype, "findAll", null);
 __decorate([
-    (0, common_1.Get)('/:id'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Get)(':id'),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], TasksController.prototype, "getTask", null);
 __decorate([
     (0, common_1.Post)(),
+    (0, common_1.UsePipes)(new common_1.ValidationPipe({ whitelist: true })),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [create_task_dto_1.CreateTaskDto]),
     __metadata("design:returntype", void 0)
-], TasksController.prototype, "createTask", null);
+], TasksController.prototype, "create", null);
 __decorate([
     (0, common_1.Patch)('/:id/done'),
     __param(0, (0, common_1.Param)('id')),
